@@ -14,7 +14,7 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
     <Card className="border-white/10 bg-white/60 shadow-sm backdrop-blur-sm">
       <CardHeader className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <CardTitle className="text-lg text-(--primary)">
+          <CardTitle className="text-lg text-primary">
             {challenge.title}
           </CardTitle>
 
@@ -41,7 +41,7 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
       </CardContent>
 
       <CardFooter>
-        <Button asChild className="bg-(--accent) text-white hover:opacity-90">
+        <Button asChild className="bg-accent text-white hover:opacity-90">
           <Link href={`/challenges/${challenge.slug}`}>View Challenge</Link>
         </Button>
       </CardFooter>

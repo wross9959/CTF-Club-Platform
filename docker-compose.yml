@@ -25,6 +25,7 @@ services:
       APP_CONFIG: /app/configs/default.yaml
       DATABASE_URL: postgres://cotw:cotw@db:5432/cotw
       CHALLENGE_SEED_PATH: /app/configs/challenges/starter.yaml
+      JWT_SECRET: dev-secret-change-me
     ports:
       - "8080:8080"
     volumes:

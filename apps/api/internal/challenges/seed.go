@@ -23,9 +23,10 @@ func SeedFromFile(ctx context.Context, db *pgxpool.Pool, path string) error {
 	for _, c := range seedFile.Challenges {
 		_, err := db.Exec(ctx, `
 			INSERT INTO challenges (
-				id, title, slug, description, category, difficulty, points, is_active, author, file_url, external_url
+				id, title, slug, description, category, difficulty, points,
+				is_active, author, file_url, external_url, flag_hash
 			)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 			ON CONFLICT (slug) DO NOTHING
 		`,
 			uuid.New().String(),
@@ -39,6 +40,7 @@ func SeedFromFile(ctx context.Context, db *pgxpool.Pool, path string) error {
 			c.Author,
 			c.FileURL,
 			c.ExternalURL,
+			HashFlag(c.Flag),
 		)
 		if err != nil {
 			return err

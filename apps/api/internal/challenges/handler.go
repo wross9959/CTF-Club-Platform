@@ -49,3 +49,48 @@ func (h *Handler) GetChallengeBySlug(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(challenge)
 }
+
+func (h *Handler) SubmitFlag(w http.ResponseWriter, r *http.Request) {
+	slug := chi.URLParam(r, "slug")
+	if slug == "" {
+		http.Error(w, "missing slug", http.StatusBadRequest)
+		return
+	}
+
+	var req SubmitFlagRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.Flag == "" {
+		http.Error(w, "flag is required", http.StatusBadRequest)
+		return
+	}
+
+	correct, err := h.Repo.CheckFlag(r.Context(), slug, req.Flag)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			http.Error(w, "challenge not found", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "failed to validate flag", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if correct {
+		_ = json.NewEncoder(w).Encode(SubmitFlagResponse{
+			Correct: true,
+			Message: "Correct flag!",
+		})
+		return
+	}
+
+	_ = json.NewEncoder(w).Encode(SubmitFlagResponse{
+		Correct: false,
+		Message: "Incorrect flag.",
+	})
+}

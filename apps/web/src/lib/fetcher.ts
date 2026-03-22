@@ -5,6 +5,7 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
     const res = await fetch(`${baseUrl}${path}`, {
         ...options,
+        credentials: "include",
         cache: "no-store",
         headers: {
             "Content-Type": "application/json",

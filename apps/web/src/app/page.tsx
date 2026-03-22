@@ -34,7 +34,7 @@ export default async function HomePage() {
         } as CSSProperties
       }
     >
-      <main className="min-h-screen bg-(--background) text-(--foreground)">
+      <main className="min-h-screen bg-background text-foreground">
         <Navbar platformName={platformName} />
         <PageContainer>
           <Hero title={heroTitle} subtitle={heroSubtitle} />

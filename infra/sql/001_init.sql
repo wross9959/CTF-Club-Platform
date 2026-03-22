@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS challenges (
     id UUID PRIMARY KEY,
     title TEXT NOT NULL,
@@ -10,6 +19,7 @@ CREATE TABLE IF NOT EXISTS challenges (
     author TEXT,
     file_url TEXT,
     external_url TEXT,
+    flag_hash TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

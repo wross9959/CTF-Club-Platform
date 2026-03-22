@@ -15,4 +15,5 @@ type ChallengeSeed struct {
 	Author      string `yaml:"author"`
 	FileURL     string `yaml:"file_url"`
 	ExternalURL string `yaml:"external_url"`
+	Flag        string `yaml:"flag"`
 }

@@ -8,17 +8,25 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/wross9959/CTF-Club-Platform/internal/challenges"
+	"github.com/wross9959/CTF-Club-Platform/internal/auth"
 	"github.com/wross9959/CTF-Club-Platform/internal/config"
 )
-
 func NewRouter(ctg *config.Config, dbPool *pgxpool.Pool) http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowCredentials: true,
 	}))
+
+	authRepo := auth.NewRepository(dbPool)
+	authHandler := auth.NewHandler(authRepo)
+	authMiddleware := auth.Middleware(authRepo)
+
+	challengeRepo := challenges.NewRepository(dbPool)
+	challengeHandler := challenges.NewHandler(challengeRepo)
 
 	r.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]string{
@@ -47,11 +55,18 @@ func NewRouter(ctg *config.Config, dbPool *pgxpool.Pool) http.Handler {
 		})
 	})
 
-	challengeRepo := challenges.NewRepository(dbPool)
-	challengeHandler := challenges.NewHandler(challengeRepo)
+	r.Post("/api/auth/register", authHandler.Register)
+	r.Post("/api/auth/login", authHandler.Login)
+	r.Post("/api/auth/logout", authHandler.Logout)
+
+	r.Group(func(protected chi.Router) {
+		protected.Use(authMiddleware)
+		protected.Get("/api/auth/me", authHandler.Me)
+		protected.Post("/api/challenges/{slug}", challengeHandler.GetChallengeBySlug)
+	})
 
 	r.Get("/api/challenges", challengeHandler.ListChallenges)
-	r.Get("/api/challenges/{slug}", challengeHandler.GetChallengeBySlug)
+	
 
 	return r
 }

@@ -82,3 +82,18 @@ func (r *Repository) GetBySlug(ctx context.Context, slug string) (*Challenge, er
 
 	return &c, nil
 }
+
+func (r *Repository) CheckFlag(ctx context.Context, slug string, submittedFlag string) (bool, error) {
+	row := r.DB.QueryRow(ctx, `
+		SELECT flag_hash
+		FROM challenges
+		WHERE slug = $1
+	`, slug)
+
+	var flagHash string
+	if err := row.Scan(&flagHash); err != nil {
+		return false, err
+	}
+
+	return HashFlag(submittedFlag) == flagHash, nil
+}

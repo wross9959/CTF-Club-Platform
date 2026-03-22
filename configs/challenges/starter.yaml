@@ -1,14 +1,15 @@
 challenges:
-  - title: "Cookie Monster"
+  - title: "Warmup Web"
     slug: "warmup-web"
     description: "A beginner-friendly web challenge to get started."
     category: "web"
     difficulty: "easy"
     points: 100
     is_active: true
-    author: "Will Ross"
+    author: "UNB Cyber Club"
     file_url: ""
     external_url: ""
+    flag: "flag{warmup_web}"
 
   - title: "Cipher Sprint"
     slug: "cipher-sprint"
@@ -20,14 +21,4 @@ challenges:
     author: "UNB Cyber Club"
     file_url: "/files/cipher-sprint.zip"
     external_url: ""
-
-  - title: "Tiny Overflow"
-    slug: "tiny-overflow"
-    description: "Exploit a small binary and get code execution."
-    category: "pwn"
-    difficulty: "hard"
-    points: 300
-    is_active: false
-    author: "UNB Cyber Club"
-    file_url: ""
-    external_url: "https://example.com/challenges/tiny-overflow"
+    flag: "flag{cipher_sprint}"

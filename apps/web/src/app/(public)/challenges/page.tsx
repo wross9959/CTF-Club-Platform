@@ -8,7 +8,7 @@ export default async function ChallengesPage() {
   const challenges = await getChallenges();
 
   return (
-    <main className="min-h-screen bg-(--background) text-(--foreground)">
+    <main className="min-h-screen bg-background text-foreground">
       <Navbar platformName="COTW" />
 
       <PageContainer>
