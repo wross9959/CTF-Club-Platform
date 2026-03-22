@@ -1,0 +1,8 @@
+platform:
+  name: "UNB Cyber Club"
+  short_name: "UNBCyber"
+  support_email: "cyber@unbcybersec.com"
+
+branding:
+  hero_title: "Challenge of the Week"
+  hero_subtitle: "TBA."

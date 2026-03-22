@@ -1,0 +1,37 @@
+platform:
+  name: "Challenge of the Week Platform"
+  short_name: "COTW"
+  site_url: "http://localhost:3000"
+  support_email: "contact@unbcybersec.com"
+  timezone: "America/Moncton"
+
+branding:
+  hero_title: "Challenge of the Week"
+  hero_subtitle: "Platform Software."
+  logo_url: "/branding/logo.png"
+  primary_color: "#111827"
+  accent_color: "#dc2626"
+  background_color: "#f9fafb"
+  foreground_color: "#111827"
+
+features:
+  enable_teams: true
+  enable_announcements: true
+  enable_writeups: true
+  enable_public_scoreboard: true
+  allow_public_registration: true
+
+competition:
+  mode: "ctf"
+  categories:
+    - web
+    - crypto
+    - pwn
+    - reverse
+    - osint
+  scoring:
+    type: "static"
+    default_points: 100
+  submissions:
+    rate_limit_per_minute: 10
+    flag_regex: "^flag\\{.*\\}$"

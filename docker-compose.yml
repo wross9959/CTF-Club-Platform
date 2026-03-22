@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: cotw-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cotw
+      POSTGRES_USER: cotw
+      POSTGRES_PASSWORD: cotw
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/sql:/docker-entrypoint-initdb.d:ro
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: cotw-api
+    restart: unless-stopped
+    environment:
+      APP_CONFIG: /app/configs/default.yaml
+      DATABASE_URL: postgres://cotw:cotw@db:5432/cotw
+      CHALLENGE_SEED_PATH: /app/configs/challenges/starter.yaml
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./configs:/app/configs:ro
+    depends_on:
+      - db
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: cotw-web
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
