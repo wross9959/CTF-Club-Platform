@@ -51,3 +51,34 @@ func (r *Repository) List(ctx context.Context) ([]Challenge, error) {
 
 	return result, rows.Err()
 }
+
+func (r *Repository) GetBySlug(ctx context.Context, slug string) (*Challenge, error) {
+	row := r.DB.QueryRow(ctx, `
+		SELECT id, title, slug, description, category, difficulty, points, is_active,
+		       author, file_url, external_url, created_at, updated_at
+		FROM challenges
+		WHERE slug = $1
+	`, slug)
+
+	var c Challenge
+	err := row.Scan(
+		&c.ID,
+		&c.Title,
+		&c.Slug,
+		&c.Description,
+		&c.Category,
+		&c.Difficulty,
+		&c.Points,
+		&c.IsActive,
+		&c.Author,
+		&c.FileURL,
+		&c.ExternalURL,
+		&c.CreatedAt,
+		&c.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}

@@ -51,6 +51,7 @@ func NewRouter(ctg *config.Config, dbPool *pgxpool.Pool) http.Handler {
 	challengeHandler := challenges.NewHandler(challengeRepo)
 
 	r.Get("/api/challenges", challengeHandler.ListChallenges)
+	r.Get("/api/challenges/{slug}", challengeHandler.GetChallengeBySlug)
 
 	return r
 }
